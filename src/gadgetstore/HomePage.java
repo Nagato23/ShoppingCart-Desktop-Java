@@ -8,7 +8,11 @@ package gadgetstore;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.sql.ResultSet;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
+import sarpestein.DBHelper;
 
 /**
  *
@@ -317,6 +321,7 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         jPanel3.setLayout(new GridLayout(50,4,4,4));
         
         for(int i = 0; i < 200; i++)
@@ -336,7 +341,36 @@ public class HomePage extends javax.swing.JFrame {
         
         jPanel3.repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    
+    public void GenerateItem(ResultSet set)
+    {
+        ResultSet tempSet = set;
+        
+        int nofRows = DBHelper.CountItems(tempSet);
+        int noOfItemRows = ( ((nofRows % 4) == 0) ? (nofRows / 4) : ((nofRows / 4) + 1));
+        
+        jPanel3.setLayout(new GridLayout( noOfItemRows, 4, 4, 4));
+        
+        for(int i = 0; i < nofRows; i++)
+        {
+            DisplayItems item = new DisplayItems();
+        
+            item.setBackground(Color.WHITE);
+            item.setSize(256, 350);
 
+            item.setVisible(true);
+            item.doLayout();
+
+            jPanel3.add(item,0,0);
+            item.repaint();
+            item.SetValues("toyota", "30.0", "50.0", "", "tochi");
+        }
+        
+        jPanel3.repaint();
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
