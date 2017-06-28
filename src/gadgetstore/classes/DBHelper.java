@@ -262,4 +262,22 @@ public class DBHelper {
         
         return id;
     }
+    
+    public static String  GenertatQueryStringFromID(String[] ids)
+    {
+        String partQuery = "SELECT * FROM catalogue WHERE ";
+        
+        if(ids != null)
+        {
+            int i = 1;
+            for (String id : ids) {
+                if (i++ == ids.length) {
+                    partQuery += String.format("id = %s", id);
+                    break;
+                }
+                partQuery += String.format("id = %s OR ", id);
+            }
+        }
+        return partQuery;
+    }
 }

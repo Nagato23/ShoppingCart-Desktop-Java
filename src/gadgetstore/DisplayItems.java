@@ -18,6 +18,7 @@ public class DisplayItems extends javax.swing.JPanel {
     String cartPath = "", itemDBId = "";
     int lastQuantity = 0;
     int totalQuantity = 0;
+    double Price = 0.0;
     /**
      * Creates new form DisplayItems
      */
@@ -38,6 +39,8 @@ public class DisplayItems extends javax.swing.JPanel {
         this.jLabelPrice.setText(this.ConvertMoneyValueToStringy(Price));
         this.jLabelPrice.setSize(jLabelPrice.getPreferredSize());
         this.ChangeCartImage(filename);
+        
+        this.Price = Integer.parseInt(Price.replace(",", "").replace("N ", "").trim());
     }
     
     private String ConvertMoneyValueToStringy(String money)
@@ -264,7 +267,7 @@ public class DisplayItems extends javax.swing.JPanel {
                 System.err.println("here " + qnty + " " + line + " " + totalQuantity);
                 FileHelper.ReplaceLine(
                         this.cartPath, String.format("ID:%s", this.itemDBId),
-                        String.format("ID:%s;QUANTITY:%s", this.itemDBId, this.totalQuantity));
+                        String.format("ID:%s;QUANTITY:%s;PRICE:%s", this.itemDBId, this.totalQuantity, this.totalQuantity * this.Price));
             }
             else
             {
@@ -298,9 +301,20 @@ public class DisplayItems extends javax.swing.JPanel {
     
     private void WriteData()
     {
-        String data = String.format("ID:%s;QUANTITY:%s", this.itemDBId, this.lastQuantity);
+        String data = String.format("ID:%s;QUANTITY:%s;PRICE:%s", this.itemDBId, this.lastQuantity, this.Price);
         
         FileHelper.WriteData(this.cartPath, new String[] {data}, true);
+    }
+    
+    public void SetAtToCartBtnVisibile(Boolean status)
+    {
+        this.jButton1.setVisible(status);
+    }
+    
+    public void SetQuantity(int qnty)
+    {
+        this.jTextFieldQuantity.setText(String.valueOf(qnty));
+        this.jTextFieldQuantity.enable(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
