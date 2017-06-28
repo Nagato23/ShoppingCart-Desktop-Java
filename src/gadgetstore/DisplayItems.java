@@ -273,6 +273,8 @@ public class DisplayItems extends javax.swing.JPanel {
             {
                 this.WriteData();
             }
+            
+            JOptionPane.showMessageDialog(this, "Added " + this.lastQuantity + " items to cart","Cart Item", JOptionPane.INFORMATION_MESSAGE);
         }
         catch(Exception ex)
         {
