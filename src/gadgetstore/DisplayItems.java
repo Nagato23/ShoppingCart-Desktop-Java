@@ -5,12 +5,19 @@
  */
 package gadgetstore;
 
+import gadgetstore.classes.FileHelper;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Programming
  */
 public class DisplayItems extends javax.swing.JPanel {
-
+    String cartPath = "", itemDBId = "";
+    int lastQuantity = 0;
+    int totalQuantity = 0;
     /**
      * Creates new form DisplayItems
      */
@@ -18,13 +25,57 @@ public class DisplayItems extends javax.swing.JPanel {
         initComponents();
     }
     
-    public void SetValues(String brandName, String ram, String storageSpace, String screenSize, String supplier)
+    public void SetValues(String itemDBId, String brandName, String ram, String storageSpace, String screenSize, String supplier, String filename, String Price,
+            String cartPath)
     {
+        this.itemDBId = itemDBId;
+        this.cartPath = cartPath;
         this.jLabelBrand.setText(brandName);
         this.jLabelRam.setText(ram);
         this.jLabelStorage.setText(storageSpace);
         this.jLabelScreenSize.setText(screenSize);
         this.jLabelSupplier.setText(supplier);
+        this.jLabelPrice.setText(this.ConvertMoneyValueToStringy(Price));
+        this.jLabelPrice.setSize(jLabelPrice.getPreferredSize());
+        this.ChangeCartImage(filename);
+    }
+    
+    private String ConvertMoneyValueToStringy(String money)
+    {
+        String finalString = "";
+        int count = 0;
+        for(int i = money.length(); i > 0; --i)
+        {
+            count++;
+            char[] d = money.toCharArray();
+            
+            if( ((count % 3) == 0))
+            {
+                count = 0;
+                    finalString = "," + money.toCharArray()[i - 1] + finalString;
+            }
+            else 
+                finalString = money.toCharArray()[i - 1] + finalString;
+        }
+        
+        return finalString.replace(finalString.substring(0, 3), finalString.substring(0, 3).replace(",", ""));
+    }
+    
+    private void ChangeCartImage(String filename)
+    {
+        try
+        {
+            ImageIcon icon;
+            Image img = (new ImageIcon(filename)).getImage();
+            Image newImg = img.getScaledInstance(jLabelCartImage.getWidth(), jLabelCartImage.getHeight(), Image.SCALE_SMOOTH);
+            
+            icon = new ImageIcon(newImg);
+            jLabelCartImage.setIcon(icon);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
     
     /**
@@ -36,8 +87,8 @@ public class DisplayItems extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabelCartImage = new javax.swing.JLabel();
+        jLabelPrice = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabelBrand = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -48,30 +99,78 @@ public class DisplayItems extends javax.swing.JPanel {
         jLabelScreenSize = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabelSupplier = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jTextFieldQuantity = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("picture");
+        jLabelCartImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelCartImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/images/exit.png"))); // NOI18N
 
-        jLabel6.setBackground(new java.awt.Color(204, 0, 0));
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Price");
-        jLabel6.setOpaque(true);
+        jLabelPrice.setBackground(new java.awt.Color(204, 0, 0));
+        jLabelPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelPrice.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelPrice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelPrice.setText("Price");
+        jLabelPrice.setOpaque(true);
 
+        jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel2.setText("Brand:");
 
+        jLabelBrand.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel3.setText("RAM:");
 
+        jLabelRam.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel4.setText("Storage space:");
 
+        jLabelStorage.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel5.setText("Screen size:");
 
+        jLabelScreenSize.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jLabel7.setText("Supplier:");
 
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/Add Shopping Cart_32px.png"))); // NOI18N
+        jLabelSupplier.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        jLabelSupplier.setForeground(new java.awt.Color(51, 51, 255));
+
+        jButton1.setBackground(new java.awt.Color(255, 204, 0));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/Add Shopping Cart_32px.png"))); // NOI18N
+        jButton1.setText("Add to cart");
+        jButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextFieldQuantity.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        jTextFieldQuantity.setText("Qty");
+        jTextFieldQuantity.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldQuantityFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldQuantityFocusLost(evt);
+            }
+        });
+        jTextFieldQuantity.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTextFieldQuantityMouseEntered(evt);
+            }
+        });
+        jTextFieldQuantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldQuantityActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -79,83 +178,145 @@ public class DisplayItems extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelRam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jTextFieldQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelStorage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelScreenSize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelSupplier, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelBrand, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelBrand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelRam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelStorage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelScreenSize, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(22, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel13)
-                .addContainerGap())
+                .addComponent(jLabelPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabelCartImage, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabelBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabelCartImage, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelBrand, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jLabelRam, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabelStorage, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelStorage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
                     .addComponent(jLabelScreenSize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelSupplier, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabelSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
+                    .addComponent(jTextFieldQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try
+        {
+            String line = "";
+            
+            this.lastQuantity = (jTextFieldQuantity.getText().toLowerCase().equals("qty")) ? 1 : Integer.parseInt(jTextFieldQuantity.getText());
+            
+            if (!(line = FileHelper.GetData(this.cartPath, String.format("ID:%s", this.itemDBId))).equals("")) {
+                int qnty = Integer.parseInt(line.split(";")[1].split(":")[1]);
+                
+                
+                //if item has been destroyed, still restore quantity from cart list
+                this.totalQuantity = (qnty > this.totalQuantity) ? (qnty + this.lastQuantity) : this.totalQuantity + this.lastQuantity;
+                
+                System.err.println("here " + qnty + " " + line + " " + totalQuantity);
+                FileHelper.ReplaceLine(
+                        this.cartPath, String.format("ID:%s", this.itemDBId),
+                        String.format("ID:%s;QUANTITY:%s", this.itemDBId, this.totalQuantity));
+            }
+            else
+            {
+                this.WriteData();
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Invalid quantity. Please input a valid quantity.", "Invalid quantity Input", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextFieldQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldQuantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldQuantityActionPerformed
+
+    private void jTextFieldQuantityMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldQuantityMouseEntered
+        
+    }//GEN-LAST:event_jTextFieldQuantityMouseEntered
+
+    private void jTextFieldQuantityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantityFocusLost
+        if(jTextFieldQuantity.getText().equals(""))
+            jTextFieldQuantity.setText("Qty");
+    }//GEN-LAST:event_jTextFieldQuantityFocusLost
+
+    private void jTextFieldQuantityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldQuantityFocusGained
+        jTextFieldQuantity.setText("");
+    }//GEN-LAST:event_jTextFieldQuantityFocusGained
+
+    
+    private void WriteData()
+    {
+        String data = String.format("ID:%s;QUANTITY:%s", this.itemDBId, this.lastQuantity);
+        
+        FileHelper.WriteData(this.cartPath, new String[] {data}, true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel13;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelBrand;
+    private javax.swing.JLabel jLabelCartImage;
+    private javax.swing.JLabel jLabelPrice;
     private javax.swing.JLabel jLabelRam;
     private javax.swing.JLabel jLabelScreenSize;
     private javax.swing.JLabel jLabelStorage;
     private javax.swing.JLabel jLabelSupplier;
+    private javax.swing.JTextField jTextFieldQuantity;
     // End of variables declaration//GEN-END:variables
 }

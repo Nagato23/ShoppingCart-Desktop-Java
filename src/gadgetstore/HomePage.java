@@ -5,26 +5,28 @@
  */
 package gadgetstore;
 
+import gadgetstore.classes.Catalogue;
+import gadgetstore.classes.DBHelper;
+import gadgetstore.classes.FileHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.sql.ResultSet;
-import javax.swing.JFrame;
-import javax.swing.JTable;
-import javax.swing.table.TableModel;
-import sarpestein.DBHelper;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author SAM
  */
 public class HomePage extends javax.swing.JFrame {
-
+    String cartPath = "cart.txt";
     /**
      * Creates new form HomePage
      */
     public HomePage() {
         initComponents();
+        
+        FileHelper.CreateFile(this.cartPath);
     }
 
     /**
@@ -46,20 +48,25 @@ public class HomePage extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBoxLaptop = new javax.swing.JCheckBox();
+        jCheckBoxTablet = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
+        jComboBoxRAM = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox();
+        jComboBoxStorageSize = new javax.swing.JComboBox();
         jLabel16 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextFieldMinCost = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextFieldMaxCost = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jComboBoxBrandName = new javax.swing.JComboBox();
+        jLabel21 = new javax.swing.JLabel();
+        jComboBoxScreenSize = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
 
@@ -79,15 +86,19 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setForeground(new java.awt.Color(255, 153, 0));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/Contacts.png"))); // NOI18N
+        jLabel3.setText("Sign in");
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
             }
         });
 
+        jLabel2.setForeground(new java.awt.Color(255, 153, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/Shopping Cart Loaded.png"))); // NOI18N
+        jLabel2.setText("Checkout");
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
@@ -105,6 +116,17 @@ public class HomePage extends javax.swing.JFrame {
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("Store");
 
+        jButton2.setBackground(new java.awt.Color(255, 204, 0));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/Shopping Cart Loaded.png"))); // NOI18N
+        jButton2.setText("Checkout");
+        jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -114,15 +136,17 @@ public class HomePage extends javax.swing.JFrame {
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 622, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(177, 177, 177)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102)
+                .addGap(82, 82, 82)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(20, 20, 20))
+                .addGap(40, 40, 40))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -135,14 +159,14 @@ public class HomePage extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel18)
                                 .addComponent(jLabel19))
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jTextField1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel3)))
+                    .addComponent(jTextField1))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jButton2)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(204, 51, 0));
@@ -150,25 +174,26 @@ public class HomePage extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel12.setText("DEVICE TYPE");
 
-        jCheckBox2.setBackground(new java.awt.Color(204, 51, 0));
-        jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox2.setText("Laptop");
+        jCheckBoxLaptop.setBackground(new java.awt.Color(204, 51, 0));
+        jCheckBoxLaptop.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBoxLaptop.setText("Laptop");
 
-        jCheckBox3.setBackground(new java.awt.Color(204, 51, 0));
-        jCheckBox3.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox3.setText("Tablet");
+        jCheckBoxTablet.setBackground(new java.awt.Color(204, 51, 0));
+        jCheckBoxTablet.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBoxTablet.setText("Tablet");
 
         jLabel13.setBackground(new java.awt.Color(0, 0, 0));
         jLabel13.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel13.setText("RAM");
 
-        jComboBox3.setBackground(new java.awt.Color(204, 51, 0));
-        jComboBox3.setEditable(true);
-        jComboBox3.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxRAM.setBackground(new java.awt.Color(204, 51, 0));
+        jComboBoxRAM.setEditable(true);
+        jComboBoxRAM.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        jComboBoxRAM.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBoxRAM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--- NONE ---", "1GB", "2GB", "3GB", "4GB", "5GB", "6GB", "7GB", "8GB", "16GB", "32GB" }));
+        jComboBoxRAM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
+                jComboBoxRAMActionPerformed(evt);
             }
         });
 
@@ -179,15 +204,20 @@ public class HomePage extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setText("COST");
 
-        jComboBox4.setBackground(new java.awt.Color(204, 51, 0));
-        jComboBox4.setEditable(true);
-        jComboBox4.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxStorageSize.setBackground(new java.awt.Color(204, 51, 0));
+        jComboBoxStorageSize.setEditable(true);
+        jComboBoxStorageSize.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        jComboBoxStorageSize.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBoxStorageSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--- NONE ---", "30 GB", "50 GB", "150 GB", "200 GB", "250 GB", "300 GB", "350 GB", "500 GB", "750 GB", "1 TB" }));
 
+        jLabel16.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("MAX:");
+        jLabel16.setText("MIN:");
+
+        jTextFieldMinCost.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gadgetstore/Search_24px.png"))); // NOI18N
         jButton1.setText("Search");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,8 +225,35 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
+        jLabel17.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("MAX:");
+
+        jTextFieldMaxCost.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+
+        jLabel20.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel20.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel20.setText("BRAND");
+
+        jComboBoxBrandName.setBackground(new java.awt.Color(204, 51, 0));
+        jComboBoxBrandName.setEditable(true);
+        jComboBoxBrandName.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        jComboBoxBrandName.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBoxBrandName.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--- NONE ---", "ACER", "ASUS", "DELL", "HP", "LENOVO", "SAMSUNG", "SHARP", "SONY", "TECHNO" }));
+        jComboBoxBrandName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxBrandNameActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel21.setText("SCREEN SIZE");
+
+        jComboBoxScreenSize.setBackground(new java.awt.Color(204, 51, 0));
+        jComboBoxScreenSize.setEditable(true);
+        jComboBoxScreenSize.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        jComboBoxScreenSize.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBoxScreenSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--- NONE ---", "6 '", "7 '", "8 '", "9 '", "10 '", "11 '", "12 '", "13 '", "14 '", "15 '", "16 '", "17 '", " " }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -206,25 +263,29 @@ public class HomePage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4))
                     .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel16))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldMinCost)
+                            .addComponent(jTextFieldMaxCost)))
+                    .addComponent(jComboBoxBrandName, javax.swing.GroupLayout.Alignment.TRAILING, 0, 222, Short.MAX_VALUE)
+                    .addComponent(jComboBoxRAM, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBoxStorageSize, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBoxScreenSize, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBoxTablet)
                             .addComponent(jLabel12)
-                            .addComponent(jCheckBox3)
-                            .addComponent(jCheckBox2)
-                            .addComponent(jLabel13))
-                        .addGap(0, 97, Short.MAX_VALUE)))
+                            .addComponent(jCheckBoxLaptop)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel21))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -233,30 +294,38 @@ public class HomePage extends javax.swing.JFrame {
                 .addGap(45, 45, 45)
                 .addComponent(jLabel12)
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBox2)
+                .addComponent(jCheckBoxLaptop)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox3)
-                .addGap(25, 25, 25)
+                .addComponent(jCheckBoxTablet)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBoxBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addComponent(jComboBoxRAM, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addComponent(jComboBoxStorageSize, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBoxScreenSize, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel15)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldMinCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldMaxCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -267,7 +336,7 @@ public class HomePage extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1069, Short.MAX_VALUE)
+            .addGap(0, 1093, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,11 +349,11 @@ public class HomePage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1043, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1029, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -316,56 +385,215 @@ public class HomePage extends javax.swing.JFrame {
         cf.setVisible(true);
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+    private void jComboBoxRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxRAMActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+    }//GEN-LAST:event_jComboBoxRAMActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        jPanel3.setLayout(new GridLayout(50,4,4,4));
         
-        for(int i = 0; i < 200; i++)
+        
+        String[] ids = null;
+        try
         {
-            DisplayItems item = new DisplayItems();
-        
-            item.setBackground(Color.WHITE);
-            item.setSize(256, 350);
+            //get value preference
+            String deviceType, brandName;
+            double ramSize, storageSize, screenSize, minCost, maxCost;
 
-            item.setVisible(true);
-            item.doLayout();
-
-            jPanel3.add(item,0,0);
-            item.repaint();
-            item.SetValues("toyota", "30.0", "50.0", "", "tochi");
+            deviceType = (jCheckBoxLaptop.isSelected()) ? "Laptop" : "Tablet";
+            
+            brandName = ((!jComboBoxBrandName.getSelectedItem().toString().equals("--- NONE ---")) ?
+                        jComboBoxBrandName.getSelectedItem().toString().trim() : 
+                        "");
+            
+            ramSize = ((!jComboBoxRAM.getSelectedItem().toString().equals("--- NONE ---")) ?
+                        Double.parseDouble(jComboBoxRAM.getSelectedItem().toString().replace("GB", "").trim()) : 
+                        0.0);
+            
+            if(!jComboBoxStorageSize.getSelectedItem().toString().toLowerCase().equals("--- none ---"))
+            {
+                System.err.println("here");
+                String text = jComboBoxStorageSize.getSelectedItem().toString().toLowerCase();
+                
+                if(text.contains("tb"))
+                {
+                    double value = Double.parseDouble(
+                            text.replace("tb", "").trim()
+                    );
+                    System.err.println(value);
+                    value *= 1024.00;
+                    
+                    storageSize = value;
+                }
+                else
+                {
+                    double value = Double.parseDouble(
+                            text.replace(" gb", "").trim()
+                    );
+                    
+                    
+                    System.err.println(value);
+                    value *= 1024.00;
+                    
+                    storageSize = value;
+                }
+            }
+            else
+                storageSize = 0.0;
+            
+            
+            screenSize = ((!jComboBoxScreenSize.getSelectedItem().toString().equals("--- NONE ---")) ?
+                        Double.parseDouble(jComboBoxScreenSize.getSelectedItem().toString().replace("'", "").trim()) : 
+                        0.0);
+            
+            
+            minCost = (!jTextFieldMinCost.getText().equals("")) ? Integer.parseInt(jTextFieldMinCost.getText().trim()) : 0.0;
+            maxCost = (!jTextFieldMaxCost.getText().equals("")) ? Integer.parseInt(jTextFieldMaxCost.getText().trim()) : 0.0;
+            
+            Catalogue catalogue = new Catalogue();
+            ids = catalogue.GetMatchedItemsId(deviceType, brandName, ramSize, storageSize, screenSize, minCost, maxCost);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Invalid min or maximum Cost input", "Invalid Inputs", JOptionPane.ERROR_MESSAGE);
         }
         
-        jPanel3.repaint();
+        
+        String partQuery = "SELECT * FROM catalogue WHERE ";
+        
+        if(ids != null)
+        {
+            int i = 1;
+            for (String id : ids) {
+                if (i++ == ids.length) {
+                    partQuery += String.format("id = %s", id);
+                    break;
+                }
+                partQuery += String.format("id = %s OR ", id);
+            }
+            
+            DBHelper db = new DBHelper();
+            
+            ResultSet set = db.ExecuteQuery(partQuery);
+            
+            this.GenerateItem(set);
+        }
+        
+//        DBHelper db = new DBHelper();
+//        
+//        String query = "SELECT * FROM catalogue";
+//        ResultSet set = null;
+//        
+//        try
+//        {
+//        
+//            Connection con = ((Connection) DriverManager.getConnection("jdbc:mysql://localhost/sarpestein_db", "root", ""));
+//            Statement st = (Statement) con.createStatement();
+//            set = st.executeQuery(query);
+//        }
+//        catch(Exception ex)
+//        {
+//            ex.printStackTrace();
+//        }
+//        this.GenerateItem(set);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBoxBrandNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBrandNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxBrandNameActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try
+        {
+            String line = "";
+
+            this.lastQuantity = (jTextFieldQuantity.getText().toLowerCase().equals("qty")) ? 1 : Integer.parseInt(jTextFieldQuantity.getText());
+
+            if (!(line = FileHelper.GetData(this.cartPath, String.format("ID:%s", this.itemDBId))).equals("")) {
+                int qnty = Integer.parseInt(line.split(";")[1].split(":")[1]);
+
+                //if item has been destroyed, still restore quantity from cart list
+                this.totalQuantity = (qnty > this.totalQuantity) ? (qnty + this.lastQuantity) : this.totalQuantity + this.lastQuantity;
+
+                System.err.println("here " + qnty + " " + line + " " + totalQuantity);
+                FileHelper.ReplaceLine(
+                    this.cartPath, String.format("ID:%s", this.itemDBId),
+                    String.format("ID:%s;QUANTITY:%s", this.itemDBId, this.totalQuantity));
+            }
+            else
+            {
+                this.WriteData();
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Invalid quantity. Please input a valid quantity.", "Invalid quantity Input", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     
     public void GenerateItem(ResultSet set)
     {
         ResultSet tempSet = set;
         
-        int nofRows = DBHelper.CountItems(tempSet);
-        int noOfItemRows = ( ((nofRows % 4) == 0) ? (nofRows / 4) : ((nofRows / 4) + 1));
+        int nofRows = DBHelper.CountItems(set);
         
-        jPanel3.setLayout(new GridLayout( noOfItemRows, 4, 4, 4));
+        int noOfItemRows = ( ((nofRows % 4) == 0) ? (nofRows / 4) : (int)(Math.ceil((nofRows / 4) + 1)));
         
-        for(int i = 0; i < nofRows; i++)
+        jPanel3.removeAll();
+        jPanel3.setLayout(new GridLayout(8 , 4, 4, 4));
+        //jPanel3.setLayout(new GridLayout( noOfItemRows, 4, 4, 4));
+        int counter = 0;
+        try
         {
-            DisplayItems item = new DisplayItems();
-        
-            item.setBackground(Color.WHITE);
-            item.setSize(256, 350);
+            while(set.next())
+            {
+                if (counter++ == 30) break;
+                DisplayItems item = new DisplayItems();
 
-            item.setVisible(true);
-            item.doLayout();
+                item.setBackground(Color.WHITE);
+                item.setSize(256, 350);
 
-            jPanel3.add(item,0,0);
-            item.repaint();
-            item.SetValues("toyota", "30.0", "50.0", "", "tochi");
+                item.setVisible(true);
+                item.doLayout();
+
+                jPanel3.add(item, 0, 0);
+                item.repaint();
+                
+                String basePath = "C:/Users/Programming/Pictures/PROJECT IMAGES/GadgetStore/src/gadgetstore/cart images";
+                
+                if (set.getString("type").toLowerCase().equals("laptop"))
+                {
+                    item.SetValues(
+                            set.getString("id"), 
+                            set.getString("brandName"), 
+                            set.getString("ram") + "GB",
+                            set.getString("storageSize") + "GB", set.getString("screenSize") + " inches",
+                            set.getString("supplier"),
+                            basePath + "/laptops/" + set.getString("picturePath"),
+                            "N " + set.getString("cost").trim(),
+                            this.cartPath
+                    );
+                }
+                else
+                {
+                    item.SetValues(
+                            set.getString("id"),
+                            set.getString("brandName"), set.getString("ram"),
+                            set.getString("storageSize"), set.getString("screenSize"),
+                            set.getString("supplier"),
+                            basePath + "/tabs/" + set.getString("picturePath"),
+                            "N " + set.getString("cost").trim(),
+                            this.cartPath);
+                }
+            }
         }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        
         
         jPanel3.repaint();
     }
@@ -408,10 +636,13 @@ public class HomePage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JComboBox jComboBox4;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBoxLaptop;
+    private javax.swing.JCheckBox jCheckBoxTablet;
+    private javax.swing.JComboBox jComboBoxBrandName;
+    private javax.swing.JComboBox jComboBoxRAM;
+    private javax.swing.JComboBox jComboBoxScreenSize;
+    private javax.swing.JComboBox jComboBoxStorageSize;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -423,6 +654,8 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
@@ -430,8 +663,8 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextFieldMaxCost;
+    private javax.swing.JTextField jTextFieldMinCost;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sarpestein;
+package gadgetstore.classes;
 
 import java.sql.ResultSet;
 
@@ -54,7 +54,7 @@ public class Catalogue {
         
         try
         {
-            query = "SELECT cost FROM catalogue ORDER BY cost DESC LIMIT 1";
+            query = "SELECT * FROM catalogue ORDER BY cost DESC LIMIT 1";
             
             ResultSet set = db.ExecuteQuery(query);
             
