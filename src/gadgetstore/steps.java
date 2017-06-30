@@ -6,6 +6,7 @@
 
 package gadgetstore;
 
+import gadgetstore.classes.DBHelper;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -670,6 +671,7 @@ public class steps extends javax.swing.JFrame {
         catch (Exception e)
         {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null ,"UNSUCCESSFUL ENTRY");
 
         }
         // TODO add your handling code here:
@@ -761,18 +763,24 @@ public class steps extends javax.swing.JFrame {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost/GADGETSTORE", "root","kikelomo") ;
             Statement st= (Statement)
             con.createStatement();
+            String query = 
+                    "INSERT INTO store() VALUES ('"+name+ "', '"+lastname+ "' , '"+address+ "', '"+country+ "' , '"+state+ "', '"+phone+ "','"+email+ "','"+method+ "','"+cardname+ "','"+cardnumber+ "','"+expdate+ "','"+expyear+ "','"+securitycode+ "','"+f+ "')";
+            DBHelper db = new DBHelper();
+            db.ExecuteQuery(country);
             String insert = "INSERT INTO store VALUES ('"+name+ "', '"+lastname+ "' , '"+address+ "', '"+country+ "' , '"+state+ "', '"+phone+ "','"+email+ "','"+method+ "','"+cardname+ "','"+cardnumber+ "','"+expdate+ "','"+expyear+ "','"+securitycode+ "','"+f+ "')";
             st.executeUpdate(insert) ;
             System.out.print("successful entry") ;
             JOptionPane.showMessageDialog(null ,"SUCCESSFUL REGISTRATION, PRESS THE NEXT BUTTON");
             con.close() ;
-
+            
         }
         catch (Exception e)
         {
             e.printStackTrace();
 
         }
+        
+        JOptionPane.showMessageDialog(this, "Payment Complete. Thanks for Shopping with Sarpestein", "Transaction Complete", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void b4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b4ActionPerformed

@@ -5,7 +5,9 @@
  */
 package gadgetstore.classes;
 
+
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -23,14 +25,14 @@ public class Catalogue {
     
     
     public String[] GetMatchedItemsId(String deviceType, String brandName, double ramSize, double storageSize,
-            double screenSize, double minUserCost, double maxUserCost)
+            double screenSize, double cost)
     {
         
         double maxPriceInCatalogue = this.GetMinCostInDB();
         double minPriceInCatalogue = this.GetMaxCostInDB();
         
         HEOM  matcher = 
-                new HEOM(deviceType, brandName, ramSize, storageSize, screenSize, minUserCost, maxUserCost, maxPriceInCatalogue, minPriceInCatalogue);
+                new HEOM(deviceType, brandName, ramSize, storageSize, screenSize, cost, maxPriceInCatalogue, minPriceInCatalogue);
         
         
         HEOMData[] output = matcher.PerformMatching();
@@ -99,6 +101,11 @@ public class Catalogue {
     }
 }
 
+
+/**
+ *
+ * @author Programming
+ */
 class HEOM
 {
     private final String deviceType;
@@ -107,12 +114,11 @@ class HEOM
     private final double storageSize;
     private final double screenSize;
     private final double minUserCost;
-    private final double maxUserCost;
     private final double maxPriceInCatalogue;
     private final double minPriceInCatalogue;
     
     HEOM(String deviceType, String brandName, double ramSize, double storageSize,
-            double screenSize, double minUserCost, double maxUserCost, double maxPriceInCatalogue, double minPriceInCatalogue)
+            double screenSize, double minUserCost,double maxPriceInCatalogue, double minPriceInCatalogue)
     {
         this.deviceType = deviceType;
         this.brandName = brandName;
@@ -120,7 +126,6 @@ class HEOM
         this.storageSize = storageSize;
         this.screenSize = screenSize;
         this.minUserCost = minUserCost;
-        this.maxUserCost = maxUserCost;
         this.maxPriceInCatalogue = maxPriceInCatalogue;
         this.minPriceInCatalogue = minPriceInCatalogue;
     }
@@ -143,26 +148,23 @@ class HEOM
                 score += (storageSize == 0.0) ? 1.0 : overlap(String.valueOf(storageSize), set.getString("storageSize"));
                 score += (screenSize == 0.0) ? 1.0 : overlap(String.valueOf(screenSize), set.getString("screenSize"));
                 
-                if((minUserCost == 0.0 ) && (maxUserCost == 0.0))
+                if((minUserCost == 0.0 ))
                     score += 1.0;
                 else
-                    score += rnDiff(minUserCost, maxUserCost, maxPriceInCatalogue, minPriceInCatalogue);
+                    score += rnDiff(minUserCost, Double.parseDouble(set.getString("cost")), maxPriceInCatalogue, minPriceInCatalogue);
                 
                 HEOMData data = new HEOMData();
                 data.id = set.getString("id");
-                data.score = score;
+                data.score = Math.sqrt(score);
                         
                 values[count] = data;
                 count++;
             }
             
             finalValues = new HEOMData[count];
-            for(int i = 0; i < finalValues.length; i++)
-            {
-                finalValues[i] = values[i];
-            }
+            System.arraycopy(values, 0, finalValues, 0, finalValues.length);
         }
-        catch(Exception ex)
+        catch(SQLException | NumberFormatException ex)
         {
             ex.printStackTrace();
         }
@@ -172,12 +174,6 @@ class HEOM
     
     private HEOMData[] Sort(HEOMData[] output)
     {
-        String text;
-        
-        for(int i = 0; i < output.length; i++)
-        {
-            
-        }
         for (int i = 0; i < output.length; i++)
         {
             for (int j = 0; j < output.length; j++)
@@ -215,33 +211,29 @@ class HEOM
         int count = 0;
         
         if (!deviceType.equals(""))
-            queriesParts[count++] = String.format("type='%s'", deviceType);
+            queriesParts[count++] = String.format("type='%s' ", deviceType);
         
         if (!brandName.equals(""))
         {
-            queriesParts[count++] = String.format("brandName='%s'", brandName);
+            queriesParts[count++] = String.format("brandName='%s' ", brandName);
             
         }
         if (!(ramSize == 0.0))
-            queriesParts[count++] = String.format("ram='%s'", ramSize);
+            queriesParts[count++] = String.format("ram='%s' ", ramSize);
         
         if (!(storageSize == 0.0))
-            queriesParts[count++] = String.format("storageSize='%s'", storageSize);
+            queriesParts[count++] = String.format("storageSize='%s' ", storageSize);
         
         if (!(screenSize == 0.0))
-            queriesParts[count++] = String.format("screenSize='%s'", screenSize);
+            queriesParts[count++] = String.format("screenSize='%s' ", screenSize);
         
-        if (minUserCost != maxUserCost)
-            queriesParts[count++] = String.format("(cost > %s  AND cost < %s)", minUserCost, maxUserCost);
+        if (!(minUserCost == 0.0))
+            queriesParts[count++] = String.format("cost > '%s' ", minUserCost);
         
         finalQueriesParts = new String[count];
         
         //transfer items
-        for (int i = 0; i < finalQueriesParts.length; i++)
-        {
-            finalQueriesParts[i] = queriesParts[i];
-        }
-        
+        System.arraycopy(queriesParts, 0, finalQueriesParts, 0, finalQueriesParts.length);
         
         String query = this.GenerateQuery(finalQueriesParts);
         
@@ -252,16 +244,16 @@ class HEOM
     
     private String GenerateQuery(String[] queriesParts)
     {
-        String query = "SELECT * FROM catalogue WHERE (";
+        String query = "SELECT * FROM catalogue WHERE ";
         
         for (int i = 0; i < queriesParts.length; i++)
         {
             //System.out.println(queriesParts[i]);
             if (!queriesParts[i].equals(""))
             {
-                if(i != (queriesParts.length - 1))
-                    query += queriesParts[i] + " OR ";
-                else query += queriesParts[i] + ") ;";
+                if(i == (queriesParts.length - 1))
+                    query += queriesParts[i].replace("\n", "") + "; ";
+                else query += queriesParts[i] + " OR ";
             }
             
         }
