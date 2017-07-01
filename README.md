@@ -37,7 +37,7 @@ GRANT ALL PRIVILEGES ON * . * TO 'root'@'localhost';
 <br><br>
 # Contribution
 In caseof any challenge during the running of this project, please mail me at nkemdilimtolimtochukwu@gmail.com
-<br>
+<br><br>
 In order to fix any bug or make contribution, simply send a pull request.
-<br>
+<br><br>
 Feel free to message me for any issues  [@christ_dev](https://twitter.com/christs_dev)
